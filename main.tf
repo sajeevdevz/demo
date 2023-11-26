@@ -24,7 +24,7 @@ resource "azurerm_sql_server" "mysql" {
   version                      = "12.0"
   administrator_login          = var.admin_login
   administrator_login_password = var.admin_password
-  source_database_deletion_date = null
+  
 tags = {
     "EA_Application_ID": "A2329",
     "EA_Business_Platform": "",
