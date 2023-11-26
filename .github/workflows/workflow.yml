@@ -9,12 +9,12 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        environment: [dev, prod, perf]
-
-    env:
-      ENVIRONMENT: ${{ matrix.environment }}
+    
+    ENVIRONMENT: Dev
+    env: 
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
     steps:
     - name: Checkout code
@@ -23,24 +23,10 @@ jobs:
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
 
-    - name: Set up Azure CLI
-      run: |
-        echo "Azure CLI version:"
-        az --version
-        echo "Setting up Azure CLI..."
-        echo "Logging in with service principal..."
-        az login --service-principal --username ${{ secrets.AZURE_CLIENT_ID }} --password ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
-        if [ $? -eq 0 ]; then
-           echo "Azure CLI login successful."
-           echo "Azure account information:"
-           az account show
-        else
-          echo "Azure CLI login failed."
-          exit 1
-        fi
-      env:
-         AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-         AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-         AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+    - name: Azure CLI Login
+      run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+         
+         
+    
 
 
