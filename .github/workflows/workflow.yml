@@ -5,6 +5,10 @@ on:
     paths:
       - 'terraform.tfvars'
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   terraform:
     runs-on: ubuntu-latest
@@ -21,10 +25,12 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y azure-cli
 
-    - name: Set up Azure CLI
-      uses: azure/login@v1
+    - name: 'Az CLI login'
+      uses: azure/login@v1.5.0
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS_DEV }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
     - name: Terraform Init
       run: terraform init
@@ -32,8 +38,4 @@ jobs:
     - name: Terraform Apply
       run: terraform apply -var-file=terraform.tfvars
 
-      env:
-        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID_DEV }}
-        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET_DEV }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID_DEV }}
-        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID_DEV }}
+      
