@@ -6,6 +6,11 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     environment: testing
+    env:  
+      client-id: ${{ secrets.CLIENTID }}
+      client-secret: ${{ secrets.CLIENTSECRET}}
+      tenant-id: ${{ secrets.TENANTID }}
+      subscription-id: ${{ secrets.SUBSCRIPTIONID }}
 
     steps:
     - name: Checkout code
