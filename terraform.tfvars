@@ -1,4 +1,4 @@
-resource_group_name = "myrg"
+resource_group_name = "myrg2"
 location            = "East US"
 admin_login         = "adminuser"
 admin_password      = "Password123!"
