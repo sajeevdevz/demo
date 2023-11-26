@@ -6,5 +6,5 @@ admin_password      = "Password123!"
 
 # Environment-specific variables
 environment         = "dev"
-sql_server_name     = "mysqlserver"
-sql_db_name         = "mysqldb"
+sql_server_name     = "mysqlserverdev"
+sql_db_name         = "mysqldbdev"
