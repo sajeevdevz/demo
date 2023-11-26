@@ -4,13 +4,7 @@ on: workflow_dispatch
   
 jobs:
   terraform:
-    runs-on: ubuntu-latest
-    environment: testing
-    env:  
-      client-id: ${{ secrets.CLIENTID }}
-      client-secret: ${{ secrets.CLIENTSECRET}}
-      tenant-id: ${{ secrets.TENANTID }}
-      subscription-id: ${{ secrets.SUBSCRIPTIONID }}
+    runs-on: ubuntu-lates
 
     steps:
     - name: Checkout code
@@ -24,13 +18,10 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y azure-cli
 
-    - name: 'Az CLI login'
-      uses: azure/login@v1.5.0
+    - name: Azure Login
+      uses: azure/login@v1
       with:
-          client-id: ${{ secrets.CLIENTID }}
-          client-secret: ${{ secrets.CLIENTSECRET}}
-          tenant-id: ${{ secrets.TENANTID }}
-          subscription-id: ${{ secrets.SUBSCRIPTIONID }}
+        creds: ${{ secrets.AZURE_CLIENT_ID }} ${{ secrets.AZURE_CLIENT_SECRET }} ${{ secrets.AZURE_TENANT_ID }}
 
 
     - name: Terraform Init
