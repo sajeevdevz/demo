@@ -17,9 +17,16 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y azure-cli
+        export PATH=$PATH:/usr/bin/az
 
     - name: Check Az CLI version
       run: az --version
+
+    - name: Debug Service Principal Credentials
+      run: |
+        echo "Client ID: ${{ secrets.AZURE_CLIENT_ID }}"
+        echo "Client Secret: ${{ secrets.AZURE_CLIENT_SECRET }}"
+        echo "Tenant ID: ${{ secrets.AZURE_TENANT_ID }}"
 
     - name: Azure Login
       uses: azure/login@v1
@@ -30,11 +37,7 @@ jobs:
         allow-no-subscriptions: false
         audience: api://AzureADTokenExchange
       
-    - name: Debug Service Principal Credentials
-      run: |
-        echo "Client ID: ${{ secrets.AZURE_CLIENT_ID }}"
-        echo "Client Secret: ${{ secrets.AZURE_CLIENT_SECRET }}"
-        echo "Tenant ID: ${{ secrets.AZURE_TENANT_ID }}"
+
 
 
 
