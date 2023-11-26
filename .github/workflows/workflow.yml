@@ -31,12 +31,16 @@ jobs:
         echo "Logging in with service principal..."
         az login --service-principal --username ${{ secrets.AZURE_CLIENT_ID }} --password ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
         if [ $? -eq 0 ]; then
-          echo "Azure CLI login successful."
-          echo "Azure account information:"
-          az account show
+           echo "Azure CLI login successful."
+           echo "Azure account information:"
+           az account show
         else
           echo "Azure CLI login failed."
           exit 1
         fi
+      env:
+         AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+         AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+         AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
 
