@@ -23,8 +23,13 @@ jobs:
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
 
+    - name: Install Azure CLI
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y azure-cli
+
     - name: Set up Azure CLI
-      uses: azure/login@v1
+      uses: azure/login@v1.5.0
       with:
         creds: ${{ secrets[format('AZURE_CREDENTIALS_{0}', env.ENVIRONMENT)] }}
 
