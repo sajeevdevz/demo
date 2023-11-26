@@ -29,6 +29,13 @@ jobs:
         environment: azurecloud
         allow-no-subscriptions: false
         audience: api://AzureADTokenExchange
+      
+    - name: Debug Service Principal Credentials
+      run: |
+        echo "Client ID: ${{ secrets.AZURE_CLIENT_ID }}"
+        echo "Client Secret: ${{ secrets.AZURE_CLIENT_SECRET }}"
+        echo "Tenant ID: ${{ secrets.AZURE_TENANT_ID }}"
+
 
 
     - name: Terraform Init
