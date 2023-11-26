@@ -3,15 +3,15 @@ name: Terraform Apply
 on: workflow_dispatch
   
 
-ENVIRONMENT: Dev
-env: 
-  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-  AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-  AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 jobs:
   terraform:
     runs-on: ubuntu-latest
-
+    
+    ENVIRONMENT: Dev
+    env: 
+       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+       AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
