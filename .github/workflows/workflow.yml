@@ -9,13 +9,6 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        environment: [DEV, prod, perf]
-
-    env:
-      ENVIRONMENT: ${{ matrix.environment }}
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -23,15 +16,10 @@ jobs:
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
 
-    - name: Install Azure CLI
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y azure-cli
-
     - name: Set up Azure CLI
-      uses: azure/login@v1.5.0
+      uses: azure/login@v1
       with:
-        creds: ${{ secrets[format('AZURE_CREDENTIALS_{0}', env.ENVIRONMENT)] }}
+        creds: ${{ secrets.AZURE_CREDENTIALS_DEV }}
 
     - name: Terraform Init
       run: terraform init
@@ -40,7 +28,7 @@ jobs:
       run: terraform apply -var-file=terraform.tfvars
 
       env:
-        ARM_CLIENT_ID: ${{ secrets[format('ARM_CLIENT_ID_{0}', env.ENVIRONMENT)] }}
-        ARM_CLIENT_SECRET: ${{ secrets[format('ARM_CLIENT_SECRET_{0}', env.ENVIRONMENT)] }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets[format('ARM_SUBSCRIPTION_ID_{0}', env.ENVIRONMENT)] }}
-        ARM_TENANT_ID: ${{ secrets[format('ARM_TENANT_ID_{0}', env.ENVIRONMENT)] }}
+        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID_DEV }}
+        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET_DEV }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID_DEV }}
+        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID_DEV }}
