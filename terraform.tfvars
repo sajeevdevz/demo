@@ -8,4 +8,4 @@ Environment         = "prod"
 # Environment-specific variables
 
 sql_server_name     = "mysqlservertessst2s2"
-sql_db_name         = "mysqldbtestdss"
+sql_db_name         = "mysqldbtestdsds"

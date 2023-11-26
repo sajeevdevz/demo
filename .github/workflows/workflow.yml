@@ -1,20 +1,46 @@
-- name: Set up Azure CLI
-  run: az login --service-principal --username ${{ secrets.AZURE_CLIENT_ID }} --password ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+name: Terraform Apply
 
-- name: Debug
-  run: |
-    echo "Selected Environment: $ENVIRONMENT"
-    az account show
-    az resource show --ids /subscriptions/$ARM_SUBSCRIPTION_ID/resourceGroups
+on:
+  push:
+    paths:
+      - 'terraform.tfvars'
 
-- name: Terraform Init
-  run: terraform init
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
 
-- name: Terraform Apply
-  run: terraform apply -var-file=terraform.tfvars -auto-approve
+    strategy:
+      matrix:
+        environment: [dev, prod, perf]
 
-  env:
-    ARM_CLIENT_ID: ${{ secrets[format('ARM_CLIENT_ID_{0}', env.ENVIRONMENT)] }}
-    ARM_CLIENT_SECRET: ${{ secrets[format('ARM_CLIENT_SECRET_{0}', env.ENVIRONMENT)] }}
-    ARM_SUBSCRIPTION_ID: ${{ secrets[format('ARM_SUBSCRIPTION_ID_{0}', env.ENVIRONMENT)] }}
-    ARM_TENANT_ID: ${{ secrets[format('ARM_TENANT_ID_{0}', env.ENVIRONMENT)] }}
+    env:
+      ENVIRONMENT: ${{ matrix.environment }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v1
+
+    - name: Set up Azure CLI
+      run: az login --service-principal --username ${{ secrets.AZURE_CLIENT_ID }} --password ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+
+    - name: Debug
+      run: |
+         echo "Selected Environment: $ENVIRONMENT"
+         az account show
+         az resource show --ids /subscriptions/$ARM_SUBSCRIPTION_ID/resourceGroups
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Apply
+      run: terraform apply -var-file=terraform.tfvars -auto-approve
+
+      env:
+      ARM_CLIENT_ID: ${{ secrets[format('ARM_CLIENT_ID_{0}', env.ENVIRONMENT)] }}
+      ARM_CLIENT_SECRET: ${{ secrets[format('ARM_CLIENT_SECRET_{0}', env.ENVIRONMENT)] }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets[format('ARM_SUBSCRIPTION_ID_{0}', env.ENVIRONMENT)] }}
+      ARM_TENANT_ID: ${{ secrets[format('ARM_TENANT_ID_{0}', env.ENVIRONMENT)] }}
+
