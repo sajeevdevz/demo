@@ -1,10 +1,20 @@
 name: Terraform Apply
 
-on: workflow_dispatch
-  
+on:
+  push:
+    paths:
+      - 'terraform.tfvars'
+
 jobs:
   terraform:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        environment: [dev, prod, perf]
+
+    env:
+      ENVIRONMENT: ${{ matrix.environment }}
 
     steps:
     - name: Checkout code
@@ -13,20 +23,30 @@ jobs:
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
 
-    - name: Install Azure CLI
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y azure-cli
-        
-   
-    - name: Azure CLI Login
+    - name: Set up Azure CLI - Dev
+      uses: azure/login@v1
+      if: env.ENVIRONMENT == 'dev'
       run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
 
-      
-    #- name: Terraform Init
-    # run: terraform init
+    - name: Set up Azure CLI - Prod
+      uses: azure/login@v1
+      if: env.ENVIRONMENT == 'prod'
+      run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
 
-    #- name: Terraform Apply
-    #  run: terraform apply -var-file=terraform.tfvars -auto-approve
-
+    - name: Set up Azure CLI - Perf
+      uses: azure/login@v1
+      if: env.ENVIRONMENT == 'perf'
+      run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
       
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Apply
+      run: terraform apply -var-file=terraform.tfvars
+
+      env:
+        ARM_CLIENT_ID: ${{ secrets[format('ARM_CLIENT_ID_{0}', env.ENVIRONMENT)] }}
+        ARM_CLIENT_SECRET: ${{ secrets[format('ARM_CLIENT_SECRET_{0}', env.ENVIRONMENT)] }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets[format('ARM_SUBSCRIPTION_ID_{0}', env.ENVIRONMENT)] }}
+        ARM_TENANT_ID: ${{ secrets[format('ARM_TENANT_ID_{0}', env.ENVIRONMENT)] }}
+
