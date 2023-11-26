@@ -18,10 +18,17 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y azure-cli
 
+    - name: Check Az CLI version
+      run: az --version
+
     - name: Azure Login
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CLIENT_ID }} ${{ secrets.AZURE_CLIENT_SECRET }} ${{ secrets.AZURE_TENANT_ID }}
+        enable-AzPSSession: true
+        environment: azurecloud
+        allow-no-subscriptions: false
+        audience: api://AzureADTokenExchange
 
 
     - name: Terraform Init
