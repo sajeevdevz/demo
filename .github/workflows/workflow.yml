@@ -5,10 +5,8 @@ on: workflow_dispatch
 jobs:
   terraform:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        environment: [dev, prod, perf]
-    environment: ${{ matrix.environment }}
+    
+    environment: dev
     env: 
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
