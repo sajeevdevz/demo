@@ -15,9 +15,9 @@ jobs:
 
     - name: Extract Environment from tfvars
       run: |
-        ENVIRONMENT=$(grep -oP '(?<=Environment\s*=\s*").*"' terraform.tfvars | tr -d '"')
+        ENVIRONMENT=$(awk -F'Environment[[:space:]]*=[[:space:]]*' '{print $2}' terraform.tfvars | tr -d '"')
         echo "Environment: $ENVIRONMENT"
-        echo "::set-env name=ENVIRONMENT::$ENVIRONMENT"
+        echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_ENV
 
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
@@ -28,4 +28,4 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         environment: ${{ env.ENVIRONMENT }}
 
-    
+  
