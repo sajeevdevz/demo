@@ -33,15 +33,3 @@ jobs:
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       
     
-    steps:
-    - name: Set up Terraform
-      uses: hashicorp/setup-terraform@v1
-
-    - name: Set up Azure CLI
-      run: az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-
-    - name: Terraform Init
-      run: terraform init
-
-    - name: Terraform Apply
-      run: terraform apply -var-file=terraform.tfvars -auto-approve -var="environment=${{ ENVIRONMENT }}"
