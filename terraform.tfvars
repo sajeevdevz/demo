@@ -8,4 +8,4 @@ Environment         =  "dev"
 # Environment-specific variables
 
 sql_server_name     = "mysqlsserverdssss"
-sql_db_name         = "mysqldbtestsssssfdsds"
+sql_db_name         = "mysqldbtfestsssssfdsds"
