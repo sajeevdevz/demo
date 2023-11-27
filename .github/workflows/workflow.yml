@@ -8,11 +8,6 @@ on:
 jobs:
   terraform:
     runs-on: ubuntu-latest
-    environment: ${{ env.ENVIRONMENT }} 
-    env: 
-      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
     steps:
     - name: Checkout code
@@ -25,7 +20,14 @@ jobs:
          echo "Environment: $ENVIRONMENT"
          echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_ENV
 
-
+  terraform apply:
+    runs-on: ubuntu-latest
+    environment: ${{ env.ENVIRONMENT }}
+    env: 
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+     
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
 
