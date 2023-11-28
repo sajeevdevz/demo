@@ -11,7 +11,7 @@ provider "azurerm" {
   features {}
 }
 
-data "terraform_remote_state" "foo" {
+data "terraform_remote_state" "storage" {
   backend = "azurerm"
   config = {
     storage_account_name = "terraform123abc"
@@ -21,18 +21,27 @@ data "terraform_remote_state" "foo" {
 }
 
 
-resource "azurerm_resource_group" "myrg" {
+/*
+  resource "azurerm_resource_group" "myrg" {
   name     = "${var.environment}-${var.resource_group_name}"
-  location = "East US"
+  location = var.location
   # other properties...
+}
+*/
+
+data "azurerm_resource_group" "existing_rg" {
+  name = "kafka-eun-${var.environment}-ep-rg-0001"
 }
 
 
+output "rg_name" {
+  value = data.azurerm_resource_group.existing_rg.name
+}
 
 resource "azurerm_sql_server" "mysql" {
   name                         = var.sql_server_name
-  resource_group_name          = azurerm_resource_group.myrg.name
-  location                     = azurerm_resource_group.myrg.location
+  resource_group_name          = var.azurerm_resource_group.myrg.name
+  location                     = var.location
   version                      = "12.0"
   administrator_login          = var.admin_login
   administrator_login_password = var.admin_password
@@ -42,7 +51,7 @@ tags = {
     "EA_Business_Platform": "",
     "EA_Primary_Product": "events-platform",
     "EA_Product_Portfolio": "",
-    "Environment"= "nonprod",
+    "Environment"= var.environment,
     "IOCode": "EC000442",
     "Subscription_Type": "Cloud Native",  
 }
@@ -63,7 +72,7 @@ resource "azurerm_mssql_database" "test" {
     "EA_Business_Platform": "",
     "EA_Primary_Product": "events-platform",
     "EA_Product_Portfolio": "",
-    "Environment": "Non Production",
+    "Environment"= var.environment,
     "IOCode": "EC000442",
     "Subscription_Type": "Cloud Native",
   }
