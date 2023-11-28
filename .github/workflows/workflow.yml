@@ -47,5 +47,11 @@ jobs:
     - name: Terraform Init
       run: terraform init
 
-    - name: Terraform Apply
-      run: terraform apply -var-file=terraform.tfvars -auto-approve
+    
+    - name: Create Container
+        id: azure-tf-apply
+        uses: dflook/terraform-apply@v1.36
+        env:
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
