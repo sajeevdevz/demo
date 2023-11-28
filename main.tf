@@ -13,7 +13,7 @@ provider "azurerm" {
 
 terraform {
   backend "azurerm" {
-    resource_group_name  = new-RG
+    resource_group_name  = "new-RG"
     storage_account_name = "abcd1234"
     container_name       = "tfstate"
     key                  = "prod.terraform.tfstate"
