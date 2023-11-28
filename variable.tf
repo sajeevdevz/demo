@@ -8,6 +8,11 @@ variable "location" {
   type        = string
 }
 
+variable "environment" {
+  description = "env name"
+  type        = string 
+}
+
 variable "admin_login" {
   description = "The SQL Server administrator login"
   type        = string

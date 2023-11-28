@@ -22,7 +22,7 @@ data "terraform_remote_state" "foo" {
 
 
 resource "azurerm_resource_group" "myrg" {
-  name     = var.resource_group_name
+  name     = "${var.environment}-${var.resource_group_name}"
   location = "East US"
   # other properties...
 }
@@ -42,7 +42,7 @@ tags = {
     "EA_Business_Platform": "",
     "EA_Primary_Product": "events-platform",
     "EA_Product_Portfolio": "",
-    "Environment"= var.Environment,
+    "Environment"= "nonprod",
     "IOCode": "EC000442",
     "Subscription_Type": "Cloud Native",  
 }
