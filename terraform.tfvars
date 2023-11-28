@@ -3,7 +3,7 @@ resource_group_name = "myrg"
 location            = "East US"
 admin_login         = "adminuser"
 admin_password      = "Password123!"
-Environment         =  "dev"
+Environment         =  "prod"
 
 # Environment-specific variables
 
