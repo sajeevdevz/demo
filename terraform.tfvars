@@ -7,5 +7,5 @@ Environment         =  "perf"
 
 # Environment-specific variables
 
-sql_server_name     = "mysqlsxss3ssrsesrsvssedssss"
+sql_server_name     = "mysqlsxss3sdsrsesrsvssedssss"
 sql_db_name         = "mysqldbfeccstssacscxxacsssfdsds"
