@@ -42,7 +42,7 @@ tags = {
     "EA_Business_Platform": "",
     "EA_Primary_Product": "events-platform",
     "EA_Product_Portfolio": "",
-    "Environment": "Non Production",
+    "Environment"= var.Environment,
     "IOCode": "EC000442",
     "Subscription_Type": "Cloud Native",  
 }
