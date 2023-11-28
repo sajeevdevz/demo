@@ -11,10 +11,15 @@ provider "azurerm" {
   features {}
 }
 
-resource "azurerm_resource_group" "myrg" {
-  name     = var.resource_group_name
-  location = "West Europe"
+terraform {
+  backend "azurerm" {
+    resource_group_name  = azurerm_resource_group.myrg.name
+    storage_account_name = "abcd1234"
+    container_name       = "tfstate"
+    key                  = "prod.terraform.tfstate"
+  }
 }
+
 
 
 resource "azurerm_sql_server" "mysql" {
